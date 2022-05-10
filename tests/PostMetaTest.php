@@ -25,11 +25,11 @@ final class PostMetaTest extends TestCase
         $this->assertContains('meta_value', self::$postMeta->get('meta_array_key'));
     }
 
-    public function testIfMetaCanBeSet() : void
-    {
-        self::$postMeta->set('meta_custom_key', 'meta_custom_value');
-    }
-
     // TODO: Test is incomplete, cannot test update, add & delete post meta without wp functions & database
     // WP unit test is needed
+
+    // public function testIfMetaCanBeSet() : void
+    // {
+    //     self::$postMeta->set('meta_custom_key', 'meta_custom_value');
+    // }
 }
