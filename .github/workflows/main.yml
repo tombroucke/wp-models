@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: ['7.4', '8.0', '8.1']
+        php-versions: ['7.4', '8.0', '8.1']
 
     steps:
     - uses: actions/checkout@v2
@@ -15,7 +15,7 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: ${{ matrix.php-version }}
+        php-versions: ${{ matrix.php-versions }}
 
     - name: Cache Composer dependencies
       id: composer-cache
