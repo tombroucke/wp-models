@@ -65,6 +65,10 @@ class PostTypeRepository
             'paged' => $paged
         ];
 
+        if (0 === $query) {
+            return new PostTypeCollection();
+        }
+
         if (is_int($query)) {
             $args['p'] = $query;
         } elseif (is_array($query)) {
