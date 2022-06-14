@@ -225,4 +225,14 @@ abstract class User
         $repository = new UserRepository(static::class);
         return $repository->delete($user);
     }
+    
+    /**
+     * Return ID when converting to string
+     *
+     * @return string
+     */
+    public function __toString() : string
+    {
+        return $this->getId();
+    }
 }

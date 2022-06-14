@@ -198,4 +198,14 @@ abstract class PostType
         $repository = new PostTypeRepository(static::class);
         return $repository->delete($postType);
     }
+    
+    /**
+     * Return ID when converting to string
+     *
+     * @return string
+     */
+    public function __toString() : string
+    {
+        return $this->getId();
+    }
 }

@@ -51,6 +51,11 @@ final class UserTest extends TestCase
         $this->assertEquals(self::$customer->getId(), 420);
     }
 
+    public function testIfToStringReturnsId() : void
+    {
+        $this->assertEquals((string)self::$customer, 420);
+    }
+
     public function testIfMetaIsInstanceOfUserMeta() : void
     {
         $this->assertInstanceOf(UserMeta::class, self::$customer->meta());

@@ -44,6 +44,11 @@ final class PostTypeTest extends TestCase
         $this->assertEquals(self::$event->getId(), 420);
     }
 
+    public function testIfToStringReturnsId() : void
+    {
+        $this->assertEquals((string)self::$event, 420);
+    }
+
     public function testTitleIsCorrect() : void
     {
         $this->assertEquals(self::$event->title(), 'Title of post');
