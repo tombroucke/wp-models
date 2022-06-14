@@ -2,6 +2,8 @@
 
 namespace Otomaties\WpModels;
 
+use Otomaties\WpModels\Exceptions\InvalidUserException;
+
 abstract class User
 {
     /**
@@ -31,6 +33,10 @@ abstract class User
     
         $this->id = $userId;
         $this->meta = new UserMeta($this);
+
+        if (!(bool) get_user_by('id', $userId)) {
+            throw new InvalidUserException(sprintf('User with ID %s doesn\'t exist.', $userId), 1);
+        }
     }
 
     /**

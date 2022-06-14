@@ -38,13 +38,13 @@ class Customer extends User
     }
 }
 
-function get_the_title($postId)
+function get_the_title(int $postId)
 {
     $post = new WP_Post();
     return $post->post_title;
 }
 
-function get_the_date($format, $postId)
+function get_the_date(string $format, int $postId)
 {
     $post = new WP_Post();
     $date = DateTime::createFromFormat('Y-m-d H:i:s', $post->post_date);
@@ -56,13 +56,13 @@ function get_post($postId)
     return new WP_Post();
 }
 
-function get_the_permalink($postId)
+function get_the_permalink(int $postId)
 {
     $post = new WP_Post();
     return 'https://example.com/' . $post->post_name;
 }
 
-function get_posts($args)
+function get_posts(array $args)
 {
     $return = [];
     $args['posts_per_page'] = ( $args['posts_per_page'] == -1 ? 999 : $args['posts_per_page'] );
@@ -72,7 +72,7 @@ function get_posts($args)
     return $return;
 }
 
-function get_users($args)
+function get_users(array $args)
 {
     $return = [];
     $args['number'] = ( $args['number'] == -1 ? 999 : $args['number'] );
@@ -82,7 +82,7 @@ function get_users($args)
     return $return;
 }
 
-function wp_parse_args($args, $defaults = array())
+function wp_parse_args(array $args, array $defaults = array())
 {
     if (is_object($args)) {
         $parsed_args = get_object_vars($args);
@@ -98,22 +98,22 @@ function wp_parse_args($args, $defaults = array())
     return $parsed_args;
 }
 
-function wp_insert_post($args)
+function wp_insert_post(array $args)
 {
     return 5;
 }
 
-function wp_insert_user($args)
+function wp_insert_user(array $args)
 {
     return 5;
 }
 
-function wp_delete_post($postId)
+function wp_delete_post(int $postId)
 {
     return new WP_Post();
 }
 
-function wp_delete_user($postId)
+function wp_delete_user(int $postId)
 {
     return true;
 }
@@ -129,10 +129,18 @@ function get_post_meta(int $post_id, string $key = '', bool $single = false)
     return $post->meta[$key];
 }
 
-function get_post_type($postId)
+function get_post_type(int $postId)
 {
-    if ($postId == 987) {
+    if (987 == $postId) {
         return 'invalid_post_type';
     }
     return 'event';
+}
+
+function get_user_by(string $field, int|string $value)
+{
+    if (987 == $value) {
+        return false;
+    }
+    return new WP_User;
 }

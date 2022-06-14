@@ -4,6 +4,7 @@ use Otomaties\WpModels\User;
 use PHPUnit\Framework\TestCase;
 use Otomaties\WpModels\UserMeta;
 use Otomaties\WpModels\UserCollection;
+use Otomaties\WpModels\Exceptions\InvalidUserException;
 
 final class UserTest extends TestCase
 {
@@ -30,6 +31,12 @@ final class UserTest extends TestCase
             Customer::class,
             new Customer($customer)
         );
+    }
+
+    public function testIfInvalidUserExceptionIsThrown() : void
+    {
+        $this->expectException(InvalidUserException::class);
+        new Customer(987);
     }
 
     public function testIfIdIsCorrect() : void
