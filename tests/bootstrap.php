@@ -25,7 +25,7 @@ class WP_Post
     ];
 }
 
-class WP_User 
+class WP_User
 {
     public $ID = 420;
 }
@@ -72,7 +72,8 @@ function get_posts($args)
     return $return;
 }
 
-function get_users($args) {
+function get_users($args)
+{
     $return = [];
     $args['number'] = ( $args['number'] == -1 ? 999 : $args['number'] );
     for ($i=0; $i < $args['number']; $i++) {
@@ -126,4 +127,12 @@ function get_post_meta(int $post_id, string $key = '', bool $single = false)
 {
     $post = new WP_Post();
     return $post->meta[$key];
+}
+
+function get_post_type($postId)
+{
+    if ($postId == 987) {
+        return 'invalid_post_type';
+    }
+    return 'event';
 }

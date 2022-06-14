@@ -3,6 +3,7 @@
 namespace Otomaties\WpModels;
 
 use DateTime;
+use Otomaties\WpModels\Exceptions\InvalidPostTypeException;
 
 abstract class PostType
 {
@@ -33,6 +34,17 @@ abstract class PostType
     
         $this->id = $postId;
         $this->meta = new PostMeta($this);
+        
+        if ($this::postType() != get_post_type($postId)) {
+            throw new InvalidPostTypeException(
+                sprintf(
+                    'Invalid post type. Expected %s, got %s.',
+                    $this::postType(),
+                    get_post_type($postId) ?: 'undefined'
+                ),
+                1
+            );
+        }
     }
 
     /**

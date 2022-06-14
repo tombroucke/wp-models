@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 use Otomaties\WpModels\PostMeta;
 use Otomaties\WpModels\PostType;
 use Otomaties\WpModels\PostTypeCollection;
+use Otomaties\WpModels\Exceptions\InvalidPostTypeException;
 
 final class PostTypeTest extends TestCase
 {
@@ -30,6 +31,12 @@ final class PostTypeTest extends TestCase
             PostType::class,
             new Event($post)
         );
+    }
+
+    public function testIfInvalidPostTypeExceptionIsThrown() : void
+    {
+        $this->expectException(InvalidPostTypeException::class);
+        new Event(987);
     }
 
     public function testIfIdIsCorrect() : void
