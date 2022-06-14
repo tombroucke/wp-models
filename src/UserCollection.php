@@ -12,12 +12,10 @@ use IteratorAggregate;
  */
 class UserCollection implements IteratorAggregate, Countable
 {
-    /**
-     * Array to hold items
-     *
-     * @var array
-     */
-    protected array $items = [];
+    public function __construct(protected array $items = [])
+    {
+        $this->items = $items;
+    }
     
     /**
      * Add user to items
@@ -69,5 +67,38 @@ class UserCollection implements IteratorAggregate, Countable
     public function count() : int
     {
         return count($this->items);
+    }
+
+    /**
+     * Check if collection is empty
+     *
+     * @return boolean
+     */
+    public function empty() : bool
+    {
+        return empty($this->items);
+    }
+
+    /**
+     * Filter collection
+     *
+     * @param callable $filterFunction
+     * @return UserCollection
+     */
+    public function filter(callable $filterFunction) : UserCollection
+    {
+        $filteredItems = array_filter($this->items, $filterFunction);
+        return new UserCollection($filteredItems);
+    }
+
+    /**
+     * Unique items
+     *
+     * @return UserCollection
+     */
+    public function unique() : UserCollection
+    {
+        $uniqueItems = array_unique($this->items);
+        return new UserCollection($uniqueItems);
     }
 }

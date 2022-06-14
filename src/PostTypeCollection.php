@@ -12,12 +12,10 @@ use IteratorAggregate;
  */
 class PostTypeCollection implements IteratorAggregate, Countable
 {
-    /**
-     * Array to hold items
-     *
-     * @var array
-     */
-    protected array $items = [];
+    public function __construct(protected array $items = [])
+    {
+        $this->items = $items;
+    }
     
     /**
      * Add Post to items
@@ -69,5 +67,38 @@ class PostTypeCollection implements IteratorAggregate, Countable
     public function count() : int
     {
         return count($this->items);
+    }
+
+    /**
+     * Check if collection is empty
+     *
+     * @return boolean
+     */
+    public function empty() : bool
+    {
+        return empty($this->items);
+    }
+
+    /**
+     * Filter collection
+     *
+     * @param callable $filterFunction
+     * @return PostTypeCollection
+     */
+    public function filter(callable $filterFunction) : PostTypeCollection
+    {
+        $filteredItems = array_filter($this->items, $filterFunction);
+        return new PostTypeCollection($filteredItems);
+    }
+
+    /**
+     * Unique items
+     *
+     * @return PostTypeCollection
+     */
+    public function unique() : PostTypeCollection
+    {
+        $uniqueItems = array_unique($this->items);
+        return new PostTypeCollection($uniqueItems);
     }
 }
