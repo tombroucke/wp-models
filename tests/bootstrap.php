@@ -28,6 +28,13 @@ class WP_Post
 class WP_User
 {
     public $ID = 420;
+    public $roles = ['customer'];
+
+    public function __construct(int $id) {
+        if (123 == $id) {
+            $this->roles = ['author'];
+        }
+    }
 }
 
 class Customer extends User
@@ -77,7 +84,7 @@ function get_users(array $args)
     $return = [];
     $args['number'] = ( $args['number'] == -1 ? 999 : $args['number'] );
     for ($i=0; $i < $args['number']; $i++) {
-        $return[] = new WP_User();
+        $return[] = new WP_User($i);
     }
     return $return;
 }
@@ -142,5 +149,5 @@ function get_user_by(string $field, int|string $value)
     if (987 == $value) {
         return false;
     }
-    return new WP_User;
+    return new WP_User($value);
 }

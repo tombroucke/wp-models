@@ -5,6 +5,7 @@ use PHPUnit\Framework\TestCase;
 use Otomaties\WpModels\UserMeta;
 use Otomaties\WpModels\UserCollection;
 use Otomaties\WpModels\Exceptions\InvalidUserException;
+use Otomaties\WpModels\Exceptions\InvalidUserRoleException;
 
 final class UserTest extends TestCase
 {
@@ -26,7 +27,7 @@ final class UserTest extends TestCase
 
     public function testCanBeCreatedFromWpUser() : void
     {
-        $customer = new WP_User();
+        $customer = new WP_User(420);
         $this->assertInstanceOf(
             Customer::class,
             new Customer($customer)
@@ -37,6 +38,12 @@ final class UserTest extends TestCase
     {
         $this->expectException(InvalidUserException::class);
         new Customer(987);
+    }
+
+    public function testIfInvalidUserRoleExceptionIsThrown() : void
+    {
+        $this->expectException(InvalidUserRoleException::class);
+        $customer = new Customer(123);
     }
 
     public function testIfIdIsCorrect() : void

@@ -3,6 +3,7 @@
 namespace Otomaties\WpModels;
 
 use Otomaties\WpModels\Exceptions\InvalidUserException;
+use Otomaties\WpModels\Exceptions\InvalidUserRoleException;
 
 abstract class User
 {
@@ -35,7 +36,26 @@ abstract class User
         $this->meta = new UserMeta($this);
 
         if (!(bool) get_user_by('id', $userId)) {
-            throw new InvalidUserException(sprintf('User with ID %s doesn\'t exist.', $userId), 1);
+            throw new InvalidUserException(
+                sprintf(
+                    'User with ID %s doesn\'t exist.',
+                    $userId
+                ),
+                1
+            );
+        }
+
+        $this->wpUser = new \WP_User($userId);
+
+        if (!in_array($this::role(), $this->wpUser->roles)) {
+            throw new InvalidUserRoleException(
+                sprintf(
+                    'User with ID %s doesn\'t have the %s role.',
+                    $userId,
+                    $this::role()
+                ),
+                1
+            );
         }
     }
 
