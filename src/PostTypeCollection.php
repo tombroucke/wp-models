@@ -101,4 +101,56 @@ class PostTypeCollection implements IteratorAggregate, Countable
         $uniqueItems = array_unique($this->items);
         return new PostTypeCollection($uniqueItems);
     }
+
+    /**
+     * Order collection by id, title, name & meta key
+     *
+     * @param string $key - id, title, name or meta key
+     * @param string $order - asc or desc
+     * @return PostTypeCollection
+     */
+    public function orderBy(string $key, string $order = 'desc') : PostTypeCollection
+    {
+        $order = strtolower($order);
+        $key = strtolower($key);
+        
+        $items = $this->items;
+        switch ($key) {
+            case 'id':
+                usort($items, function ($a, $b) {
+                    return $a->getId() <=> $b->getId();
+                });
+                if ($order == 'desc') {
+                    $items = array_reverse($items);
+                }
+                break;
+            case 'title':
+                usort($items, function ($a, $b) {
+                    return $a->title() <=> $b->title();
+                });
+                if ($order == 'desc') {
+                    $items = array_reverse($items);
+                }
+                break;
+            case 'name':
+                usort($items, function ($a, $b) {
+                    return $a->title() <=> $b->title();
+                });
+                if ($order == 'desc') {
+                    $items = array_reverse($items);
+                }
+                break;
+            default:
+                usort($items, function ($a, $b) use ($key) {
+                    return $a->meta()->get($key) <=> $b->meta()->get($key);
+                });
+                if ($order == 'desc') {
+                    $items = array_reverse($items);
+                }
+                break;
+        }
+
+        $this->items = $items;
+        return $this;
+    }
 }

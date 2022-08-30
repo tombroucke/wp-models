@@ -82,4 +82,25 @@ final class PostTypeCollectionTest extends TestCase
         $uniqueCollection = $collection->unique();
         $this->assertCount(1, $uniqueCollection);
     }
+
+    public function testIfCollectionCanBeOrdered() : void
+    {
+        $events = [
+            new Event(420),
+            new Event(69),
+            new Event(42),
+        ];
+
+        $events[0]->post_title = 'bac';
+        $events[1]->post_title = 'abc';
+        $events[2]->post_title = 'cab';
+
+
+        $collection = new PostTypeCollection($events);
+        $orderedCollection = $collection->orderBy('ID', 'DESC');
+        $this->assertEquals(420, $orderedCollection->first()->getID());
+
+        $orderedCollection = $collection->orderBy('ID', 'ASC');
+        $this->assertEquals(42, $orderedCollection->first()->getID());
+    }
 }
