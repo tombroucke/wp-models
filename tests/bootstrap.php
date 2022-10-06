@@ -105,7 +105,7 @@ function wp_parse_args(array $args, array $defaults = array())
     return $parsed_args;
 }
 
-function wp_insert_post(array $args)
+function wp_insert_post(array $args, bool $wp_error) : int|\WP_Error
 {
     return 5;
 }

@@ -29,7 +29,7 @@ class PostTypeRepository
             'post_content' => ''
         ];
         $args = wp_parse_args($args, $defaults);
-        $postId = wp_insert_post($args);
+        $postId = wp_insert_post($args, true);
         if (is_wp_error($postId)) {
             throw new \Exception($postId->get_error_code());
         }
@@ -39,7 +39,7 @@ class PostTypeRepository
     /**
      * Update post type
      *
-     * @param PostType $post
+     * @param PostType $postType
      * @param array $args
      * @return PostType
      */
@@ -55,9 +55,9 @@ class PostTypeRepository
      * @param integer|array|null $query Post ID or WP_Query parameters
      * @param integer $limit Number of results
      * @param integer $paged Page offset
-     * @return PostTypeCollection
+     * @return Collection
      */
-    public function find(int|array|null $query = null, int $limit = -1, int $paged = 0) : PostTypeCollection
+    public function find(int|array|null $query = null, int $limit = -1, int $paged = 0) : Collection
     {
         $args = [
             'post_type' => $this->class::postType(),
@@ -66,7 +66,7 @@ class PostTypeRepository
         ];
 
         if (0 === $query) {
-            return new PostTypeCollection();
+            return new Collection();
         }
 
         if (is_int($query)) {
@@ -76,7 +76,7 @@ class PostTypeRepository
         }
 
         $args['fields'] = 'ids';
-        $postCollection = new PostTypeCollection();
+        $postCollection = new Collection();
 
         foreach (get_posts($args) as $post) {
             $postCollection->add(new $this->class($post));

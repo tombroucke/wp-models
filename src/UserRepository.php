@@ -41,7 +41,7 @@ class UserRepository
     /**
      * Update user
      *
-     * @param User $post
+     * @param User $user
      * @param array $args
      * @return User
      */
@@ -57,9 +57,9 @@ class UserRepository
      * @param integer|array|null $query Post ID or WP_Query parameters
      * @param integer $number Number of results
      * @param integer $paged User offset
-     * @return UserCollection
+     * @return Collection
      */
-    public function find(int|array|null $query = null, int $number = -1, int $paged = 1) : UserCollection
+    public function find(int|array|null $query = null, int $number = -1, int $paged = 1) : Collection
     {
         $args = [
             'role' => $this->class::role(),
@@ -68,7 +68,7 @@ class UserRepository
         ];
 
         if (0 === $query) {
-            return new UserCollection();
+            return new Collection();
         }
 
         if (is_int($query)) {
@@ -78,23 +78,23 @@ class UserRepository
         }
 
         $args['fields'] = 'ID';
-        $userCollection = new UserCollection();
+        $Collection = new Collection();
 
         foreach (get_users($args) as $user) {
-            $userCollection->add(new $this->class($user));
+            $Collection->add(new $this->class($user));
         }
-        return $userCollection;
+        return $Collection;
     }
 
     /**
      * Delete user
      *
      * @param User $user
-     * @param boolean $force
+     * @param int|null $reassignToUserId User ID to reassign posts and links to
      * @return bool
      */
-    public function delete(User $user, bool $force = false) : bool
+    public function delete(User $user, ?int $reassignToUserId = null) : bool
     {
-        return wp_delete_user($user->getId(), $force);
+        return wp_delete_user($user->getId(), $reassignToUserId);
     }
 }

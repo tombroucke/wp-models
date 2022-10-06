@@ -3,7 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use Otomaties\WpModels\PostMeta;
 use Otomaties\WpModels\PostType;
-use Otomaties\WpModels\PostTypeCollection;
+use Otomaties\WpModels\Collection;
 use Otomaties\WpModels\Exceptions\InvalidPostTypeException;
 
 final class PostTypeTest extends TestCase
@@ -91,9 +91,9 @@ final class PostTypeTest extends TestCase
         $this->assertEquals(self::$event::postType(), 'event');
     }
 
-    public function testIfFindIsPostTypeCollection() : void
+    public function testIfFindIsCollection() : void
     {
-        $this->assertInstanceOf(PostTypeCollection::class, self::$event::find());
+        $this->assertInstanceOf(Collection::class, self::$event::find());
     }
 
     public function testIfInsertReturnsPostType() : void

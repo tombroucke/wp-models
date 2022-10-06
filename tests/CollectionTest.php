@@ -1,20 +1,20 @@
 <?php declare(strict_types=1);
 
-use Otomaties\WpModels\PostTypeCollection;
+use Otomaties\WpModels\Collection;
 use PHPUnit\Framework\TestCase;
 
-final class PostTypeCollectionTest extends TestCase
+final class CollectionTest extends TestCase
 {
     public function testIfItemsCanBeAdded() : void
     {
-        $collection = new PostTypeCollection();
+        $collection = new Collection();
         $item = new Event(420);
-        $this->assertInstanceOf(PostTypeCollection::class, $collection->add($item));
+        $this->assertInstanceOf(Collection::class, $collection->add($item));
     }
 
     public function testIfCountIsCorrect() : void
     {
-        $collection = new PostTypeCollection();
+        $collection = new Collection();
         $item = new Event(420);
         $collection->add($item);
         $collection->add($item);
@@ -24,7 +24,7 @@ final class PostTypeCollectionTest extends TestCase
 
     public function testIfFirstItemIsSet() : void
     {
-        $collection = new PostTypeCollection();
+        $collection = new Collection();
         $item = new Event(420);
         $collection->add($item);
         $this->assertInstanceOf(Event::class, $collection->first());
@@ -32,7 +32,7 @@ final class PostTypeCollectionTest extends TestCase
 
     public function testIfLastItemIsSet() : void
     {
-        $collection = new PostTypeCollection();
+        $collection = new Collection();
         $item = new Event(420);
         $collection->add($item);
         $this->assertInstanceOf(Event::class, $collection->last());
@@ -44,8 +44,8 @@ final class PostTypeCollectionTest extends TestCase
             new Event(420),
             new Event(69)
         ];
-        $collection = new PostTypeCollection($events);
-        $this->assertInstanceOf(PostTypeCollection::class, $collection);
+        $collection = new Collection($events);
+        $this->assertInstanceOf(Collection::class, $collection);
         $this->assertCount(2, $collection);
     }
 
@@ -55,16 +55,16 @@ final class PostTypeCollectionTest extends TestCase
             new Event(420),
             new Event(69)
         ];
-        $collection = new PostTypeCollection($events);
+        $collection = new Collection($events);
         $filteredCollection = $collection->filter(function ($event) {
-            return $event->getID() == 420;
+            return $event->getId() == 420;
         });
         $this->assertCount(1, $filteredCollection);
     }
 
     public function testIfCollectionCanBeEmpty() : void
     {
-        $collection = new PostTypeCollection();
+        $collection = new Collection();
         $this->assertTrue($collection->empty());
 
         $item = new Event(420);
@@ -78,9 +78,24 @@ final class PostTypeCollectionTest extends TestCase
             new Event(420),
             new Event(420),
         ];
-        $collection = new PostTypeCollection($events);
+        $collection = new Collection($events);
         $uniqueCollection = $collection->unique();
         $this->assertCount(1, $uniqueCollection);
+    }
+
+    public function testCollectionCanBeMapped() : void
+    {
+        $events = [
+            new Event(420),
+            new Event(69),
+            new Event(42),
+        ];
+
+        $collection = new Collection($events);
+        $ids = $collection->map(function ($postType) {
+            return $postType->getId();
+        });
+        $this->assertEquals([420, 69, 42], $ids);
     }
 
     public function testIfCollectionCanBeOrdered() : void
@@ -96,11 +111,21 @@ final class PostTypeCollectionTest extends TestCase
         $events[2]->post_title = 'cab';
 
 
-        $collection = new PostTypeCollection($events);
+        $collection = new Collection($events);
         $orderedCollection = $collection->orderBy('ID', 'DESC');
-        $this->assertEquals(420, $orderedCollection->first()->getID());
+        $this->assertEquals(420, $orderedCollection->first()->getId());
 
         $orderedCollection = $collection->orderBy('ID', 'ASC');
-        $this->assertEquals(42, $orderedCollection->first()->getID());
+        $this->assertEquals(42, $orderedCollection->first()->getId());
+
+        $orderedCollection = $collection->orderBy(function ($a, $b) {
+            return $a->getId() <=> $b->getId();
+        }, 'ASC');
+        $this->assertEquals(420, $orderedCollection->last()->getId());
+
+        $orderedCollection = $collection->orderBy(function ($a, $b) {
+            return $a->getId() <=> $b->getId();
+        }, 'DESC');
+        $this->assertEquals(420, $orderedCollection->first()->getId());
     }
 }

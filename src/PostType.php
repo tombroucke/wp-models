@@ -5,7 +5,7 @@ namespace Otomaties\WpModels;
 use DateTime;
 use Otomaties\WpModels\Exceptions\InvalidPostTypeException;
 
-abstract class PostType
+abstract class PostType extends Model
 {
     /**
      * Post ID
@@ -48,7 +48,7 @@ abstract class PostType
     }
 
     /**
-     * Get post ID
+     * Get ID
      *
      * @return integer
      */
@@ -128,7 +128,7 @@ abstract class PostType
     public function author() : int
     {
         $post_object = get_post($this->getId());
-        return $post_object->post_author;
+        return (int)$post_object->post_author;
     }
 
     /**
@@ -154,12 +154,11 @@ abstract class PostType
      * @param integer|array|null|null $query
      * @param integer $limit
      * @param integer $paged
-     * @return PostTypeCollection
+     * @return Collection
      */
-    public static function find(int|array|null $query = null, int $limit = -1, int $paged = 0) : PostTypeCollection
+    public static function find(int|array|null $query = null, int $limit = -1, int $paged = 0) : Collection
     {
-        $repository = new PostTypeRepository(static::class);
-        return $repository->find($query, $limit, $paged);
+        return (new PostTypeRepository(static::class))->find($query, $limit, $paged);
     }
 
     /**
@@ -170,8 +169,7 @@ abstract class PostType
      */
     public static function insert(array $args) : PostType
     {
-        $repository = new PostTypeRepository(static::class);
-        return $repository->insert($args);
+        return (new PostTypeRepository(static::class))->insert($args);
     }
 
     /**
@@ -183,8 +181,7 @@ abstract class PostType
      */
     public static function update(PostType $postType, array $args) : PostType
     {
-        $repository = new PostTypeRepository(static::class);
-        return $repository->update($postType, $args);
+        return (new PostTypeRepository(static::class))->update($postType, $args);
     }
 
     /**
@@ -195,8 +192,7 @@ abstract class PostType
      */
     public static function delete(PostType $postType) : \WP_Post|false|null
     {
-        $repository = new PostTypeRepository(static::class);
-        return $repository->delete($postType);
+        return (new PostTypeRepository(static::class))->delete($postType);
     }
     
     /**
@@ -206,6 +202,6 @@ abstract class PostType
      */
     public function __toString() : string
     {
-        return $this->getId();
+        return (string)$this->getId();
     }
 }

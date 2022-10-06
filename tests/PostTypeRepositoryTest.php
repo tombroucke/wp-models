@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use Otomaties\WpModels\PostTypeCollection;
+use Otomaties\WpModels\Collection;
 use Otomaties\WpModels\PostTypeRepository;
 
 final class PostTypeRepositoryTest extends TestCase
@@ -25,20 +25,18 @@ final class PostTypeRepositoryTest extends TestCase
 
     public function testIfPostTypeCanBeUpdated() : void
     {
-        $event = new Event(420);
-        $this->assertInstanceOf(Event::class, self::$postTypeRepository->update($event, []));
+        $this->assertInstanceOf(Event::class, self::$postTypeRepository->update(new Event(420), []));
     }
 
-    public function testIfFindReturnsPostTypeCollection() : void
+    public function testIfFindReturnsCollection() : void
     {
-        $this->assertInstanceOf(PostTypeCollection::class, self::$postTypeRepository->find());
+        $this->assertInstanceOf(Collection::class, self::$postTypeRepository->find());
         $this->assertCount(999, self::$postTypeRepository->find());
         $this->assertCount(1, self::$postTypeRepository->find(null, 1));
     }
 
     public function testIfPostCanBeDeleted() : void
     {
-        $event = new Event(420);
-        $this->assertInstanceOf(WP_Post::class, self::$postTypeRepository->delete($event));
+        $this->assertInstanceOf(WP_Post::class, self::$postTypeRepository->delete(new Event(420)));
     }
 }

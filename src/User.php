@@ -5,10 +5,10 @@ namespace Otomaties\WpModels;
 use Otomaties\WpModels\Exceptions\InvalidUserException;
 use Otomaties\WpModels\Exceptions\InvalidUserRoleException;
 
-abstract class User
+abstract class User extends Model
 {
     /**
-     * Post ID
+     * User ID
      *
      * @var integer
      */
@@ -22,9 +22,16 @@ abstract class User
     private UserMeta $meta;
 
     /**
+     * WordPress user object
+     *
+     * @var \WP_User
+     */
+    private \WP_User $wpUser;
+
+    /**
      * Initialize User
      *
-     * @param integer|\userId $userId
+     * @param integer|\WP_User $userId
      */
     public function __construct(int|\WP_User $userId)
     {
@@ -181,12 +188,11 @@ abstract class User
      * @param integer|array|null|null $query
      * @param integer $number
      * @param integer $paged
-     * @return UserCollection
+     * @return Collection
      */
-    public static function find(int|array|null $query = null, int $number = -1, int $paged = 1) : UserCollection
+    public static function find(int|array|null $query = null, int $number = -1, int $paged = 1) : Collection
     {
-        $repository = new UserRepository(static::class);
-        return $repository->find($query, $number, $paged);
+        return (new UserRepository(static::class))->find($query, $number, $paged);
     }
 
     /**
@@ -197,8 +203,7 @@ abstract class User
      */
     public static function insert(array $args) : User
     {
-        $repository = new UserRepository(static::class);
-        return $repository->insert($args);
+        return (new UserRepository(static::class))->insert($args);
     }
 
     /**
@@ -210,8 +215,7 @@ abstract class User
      */
     public static function update(User $user, array $args) : User
     {
-        $repository = new UserRepository(static::class);
-        return $repository->update($user, $args);
+        return (new UserRepository(static::class))->update($user, $args);
     }
 
     /**
@@ -222,8 +226,7 @@ abstract class User
      */
     public static function delete(User $user) : bool
     {
-        $repository = new UserRepository(static::class);
-        return $repository->delete($user);
+        return (new UserRepository(static::class))->delete($user);
     }
     
     /**
@@ -233,6 +236,6 @@ abstract class User
      */
     public function __toString() : string
     {
-        return $this->getId();
+        return (string)$this->getId();
     }
 }

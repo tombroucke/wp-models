@@ -3,7 +3,7 @@
 use Otomaties\WpModels\User;
 use PHPUnit\Framework\TestCase;
 use Otomaties\WpModels\UserMeta;
-use Otomaties\WpModels\UserCollection;
+use Otomaties\WpModels\Collection;
 use Otomaties\WpModels\Exceptions\InvalidUserException;
 use Otomaties\WpModels\Exceptions\InvalidUserRoleException;
 
@@ -66,9 +66,9 @@ final class UserTest extends TestCase
         $this->assertEquals(self::$customer::role(), 'customer');
     }
 
-    public function testIfFindIsUserCollection() : void
+    public function testIfFindIsCollection() : void
     {
-        $this->assertInstanceOf(UserCollection::class, self::$customer::find());
+        $this->assertInstanceOf(Collection::class, self::$customer::find());
     }
 
     public function testIfInsertReturnsUser() : void
