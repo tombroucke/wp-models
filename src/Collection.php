@@ -38,9 +38,9 @@ class Collection implements IteratorAggregate, Countable
     /**
      * Get first user in collection
      *
-     * @return Model|null
+     * @return mixed
      */
-    public function first() : ?Model
+    public function first() : mixed
     {
         return !empty($this->items) ? $this->items[0] : null;
     }
@@ -48,11 +48,11 @@ class Collection implements IteratorAggregate, Countable
     /**
      * Get last post in collection
      *
-     * @return Model
+     * @return mixed
      */
-    public function last() : Model
+    public function last() : mixed
     {
-        return end($this->items);
+        return !empty($this->items) ? end($this->items) : null;
     }
 
     /**
