@@ -166,7 +166,7 @@ or
 			]
 		]
 	];
-	$event = $repository->find($args); // Returns PostTypeCollection
+	$event = $repository->find($args); // Returns Collection
 ```
 or
 ```php
@@ -184,6 +184,6 @@ or
 			]
 		]
 	];
-	$event = Event::find($args); // Returns PostTypeCollection
+	$event = Event::find($args); // Returns Collection
 ```
 
