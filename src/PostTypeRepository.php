@@ -62,7 +62,8 @@ class PostTypeRepository
         $args = [
             'post_type' => $this->class::postType(),
             'posts_per_page' => $limit,
-            'paged' => $paged
+            'paged' => $paged,
+            'suppress_filters' => false,
         ];
 
         if (0 === $query) {
