@@ -62,7 +62,7 @@ class UserRepository
     public function find(int|array|null $query = null, int $number = -1, int $paged = 1) : Collection
     {
         $args = [
-            'role' => $this->class::role(),
+            'role__in' => explode(',', $this->class::role()),
             'number' => $number,
             'paged' => $paged
         ];

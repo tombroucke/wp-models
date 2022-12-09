@@ -54,7 +54,8 @@ abstract class User extends Model
 
         $this->wpUser = new \WP_User($userId);
 
-        if (!in_array($this::role(), $this->wpUser->roles)) {
+        $roles = explode(',', $this::role());
+        if (count(array_intersect($roles, $this->wpUser->roles)) === 0) {
             throw new InvalidUserRoleException(
                 sprintf(
                     'User with ID %s doesn\'t have the %s role.',
