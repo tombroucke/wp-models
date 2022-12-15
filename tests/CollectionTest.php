@@ -128,4 +128,40 @@ final class CollectionTest extends TestCase
         }, 'DESC');
         $this->assertEquals(420, $orderedCollection->first()->getId());
     }
+
+    public function testIfCollectionCanBeLimited() : void
+    {
+        $events = [
+            new Event(420),
+            new Event(69),
+            new Event(42),
+        ];
+
+        $collection = new Collection($events);
+        $limitedCollection = $collection->limit(2);
+        $this->assertCount(2, $limitedCollection);
+        $this->assertEquals(new Collection(array_splice($events, 0, 2)), $limitedCollection);
+    }
+
+    public function testIfCollectionCanBePaginated() : void
+    {
+        $events = [
+            new Event(420),
+            new Event(69),
+            new Event(42),
+        ];
+
+        $perPage = 2;
+        $collection = new Collection($events);
+
+        $firstPage = $collection->paginate($perPage, 1);
+        $this->assertCount($perPage, $firstPage);
+
+        $secondPage = $collection->paginate($perPage, 2);
+        $this->assertCount(1, $secondPage);
+        $this->assertEquals(new Collection(array_splice($events, $perPage, 1)), $secondPage);
+        
+        $thirdPage = $collection->paginate($perPage, 3);
+        $this->assertCount(0, $thirdPage);
+    }
 }

@@ -99,6 +99,32 @@ class Collection implements IteratorAggregate, Countable
     }
 
     /**
+     * Limit collection
+     *
+     * @param integer $limit
+     * @return Collection
+     */
+    public function limit(int $limit) : Collection
+    {
+        $limitedItems = array_slice($this->items, 0, $limit);
+        return new Collection($limitedItems);
+    }
+
+    /**
+     * Paginate collection
+     *
+     * @param integer $perPage Number of items per page
+     * @param integer $page Page number
+     * @return Collection
+     */
+    public function paginate(int $perPage, int $page = 1) : Collection
+    {
+        $offset = ($page - 1) * $perPage;
+        $paginatedItems = array_slice($this->items, $offset, $perPage);
+        return new Collection($paginatedItems);
+    }
+
+    /**
      * Map collection
      *
      * @param callable $mapFunction
@@ -121,6 +147,8 @@ class Collection implements IteratorAggregate, Countable
         $order = strtolower($order);
         $items = $this->items;
 
+
+        
         if (is_callable($orderBy)) {
             $sortFunction = $orderBy;
         } else {
@@ -147,6 +175,13 @@ class Collection implements IteratorAggregate, Countable
                     };
                     break;
             }
+        }
+
+        // date is callable, so we need to fix that
+        if ($sortFunction == 'date') {
+            $sortFunction = function ($a, $b) {
+                return $a->date() <=> $b->date();
+            };
         }
 
         usort($items, $sortFunction);
