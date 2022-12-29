@@ -95,6 +95,7 @@ class UserRepository
      */
     public function delete(User $user, ?int $reassignToUserId = null) : bool
     {
+        require_once(ABSPATH . 'wp-admin/includes/user.php');
         return wp_delete_user($user->getId(), $reassignToUserId);
     }
 }
