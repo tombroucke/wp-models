@@ -33,7 +33,14 @@ class PostTypeRepository
         if (is_wp_error($postId)) {
             throw new \Exception($postId->get_error_code());
         }
-        return new $this->class($postId);
+        $insertedObject = new $this->class($postId);
+
+        $action = !isset($args['ID']) ? 'inserted' : 'updated';
+        $postType = $this->class::postType();
+        do_action("wp_models_{$action}_post", $insertedObject, $args);
+        do_action("wp_models_{$action}_{$postType}", $insertedObject, $args);
+
+        return $insertedObject;
     }
 
     /**
@@ -94,6 +101,33 @@ class PostTypeRepository
      */
     public function delete(PostType $post, bool $force = false) : \WP_Post|false|null
     {
-        return wp_delete_post($post->getId(), $force);
+        $postType = $this->class::postType();
+        $deleted = wp_delete_post($post->getId(), $force);
+
+        if ($deleted) {
+            do_action("wp_models_deleted_post", $post, $force);
+            do_action("wp_models_deleted_{$postType}", $post, $force);
+        }
+
+        return $deleted;
+    }
+
+    /**
+     * Trash post
+     *
+     * @param PostType $post
+     * @return \WP_Post|false|null
+     */
+    public function trash(PostType $post) : \WP_Post|false|null
+    {
+        $postType = $this->class::postType();
+        $trashed = wp_trash_post($post->getId());
+
+        if ($trashed) {
+            do_action("wp_models_trashed_post", $post);
+            do_action("wp_models_trashed_{$postType}", $post);
+        }
+
+        return $trashed;
     }
 }

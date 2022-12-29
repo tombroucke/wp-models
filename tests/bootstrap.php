@@ -1,9 +1,8 @@
 <?php
+WP_Mock::bootstrap();
 
 use Otomaties\WpModels\PostType;
 use Otomaties\WpModels\User;
-
-define('ABSPATH', __DIR__ . '/');
 
 class Event extends PostType
 {

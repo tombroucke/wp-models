@@ -34,8 +34,13 @@ class UserRepository
         if (is_wp_error($userId)) {
             throw new \Exception($userId->get_error_code());
         }
+        $insertedObject = new $this->class($userId);
+
+        $action = !isset($args['ID']) ? 'inserted' : 'updated';
+        do_action("wp_models_{$action}_user", $insertedObject, $args);
+        do_action("wp_models_{$action}_" . $this->class::role(), $insertedObject, $args);
         
-        return new $this->class($userId);
+        return $insertedObject;
     }
 
     /**
@@ -78,12 +83,12 @@ class UserRepository
         }
 
         $args['fields'] = 'ID';
-        $Collection = new Collection();
+        $collection = new Collection();
 
         foreach (get_users($args) as $user) {
-            $Collection->add(new $this->class($user));
+            $collection->add(new $this->class($user));
         }
-        return $Collection;
+        return $collection;
     }
 
     /**
@@ -95,7 +100,18 @@ class UserRepository
      */
     public function delete(User $user, ?int $reassignToUserId = null) : bool
     {
-        require_once(ABSPATH . 'wp-admin/includes/user.php');
-        return wp_delete_user($user->getId(), $reassignToUserId);
+        if (!function_exists('wp_delete_user')) {
+            require_once(ABSPATH . 'wp-admin/includes/user.php');
+        }
+
+        $role = $this->class::role();
+        $userDeleted = wp_delete_user($user->getId(), $reassignToUserId);
+
+        if ($userDeleted) {
+            do_action("wp_models_delete_user", $user, $reassignToUserId);
+            do_action("wp_models_delete_{$role}", $user, $reassignToUserId);
+        }
+        
+        return $userDeleted;
     }
 }
