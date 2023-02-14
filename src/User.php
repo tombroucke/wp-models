@@ -26,7 +26,7 @@ abstract class User extends Model
      *
      * @var \WP_User
      */
-    private \WP_User $wpUser;
+    protected \WP_User $wpUser;
 
     /**
      * Initialize User
