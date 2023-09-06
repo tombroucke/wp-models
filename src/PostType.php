@@ -185,6 +185,17 @@ abstract class PostType extends Model
     }
 
     /**
+     * Trash post
+     *
+     * @param PostType $postType
+     * @return \WP_Post|false|null
+     */
+    public static function trash(PostType $postType) : \WP_Post|false|null
+    {
+        return (new PostTypeRepository(static::class))->trash($postType);
+    }
+
+    /**
      * Delete post
      *
      * @param PostType $postType
