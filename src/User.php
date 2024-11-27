@@ -118,7 +118,7 @@ abstract class User extends Model
         $lastName = $this->lastName();
 
         if ($firstName) {
-            return "${firstName} ${lastName}";
+            return "{$firstName} {$lastName}";
         }
 
         return $this->displayName();
